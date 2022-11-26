@@ -33,7 +33,7 @@ class MovieCard extends React.Component {
                 onClick={this.handleUnFavouriteClick}
               >
                 {" "}
-                UnFavorite{" "}
+                Unfavourite{" "}
               </button>
             ) : (
               <button
@@ -41,7 +41,7 @@ class MovieCard extends React.Component {
                 onClick={this.handleFavouriteClick}
               >
                 {" "}
-                Favorite{" "}
+                Favourite{" "}
               </button>
             )}
           </div>
