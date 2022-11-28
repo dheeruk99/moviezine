@@ -1,9 +1,10 @@
 import React from "react";
 import {addMovieToList,handleMovieSearch} from '../actions';
-
+// import {connect, StoreContext} from '../index'
+import {connect} from 'react-redux';
 
 class Navbar extends React.Component {
-
+  
   constructor(props){
     super(props);
     this.state={
@@ -12,12 +13,14 @@ class Navbar extends React.Component {
   }
 
   handleAddToMovies = (movie) => {
-    this.props.store.dispatch(addMovieToList(movie));
+    
+    this.props.dispatch(addMovieToList(movie));
   };
 
   handleSearchClick = ()=>{
+    console.log(this.props)
       const {searchText} = this.state;
-      this.props.store.dispatch(handleMovieSearch(searchText));
+      this.props.dispatch(handleMovieSearch(searchText));
   }
 
 
@@ -29,7 +32,6 @@ class Navbar extends React.Component {
 
   render() {
     const {showSearchResult, results:movie} =this.props.search;
-    console.log(this.props.search)
     return (
       <div className="nav">
         <div className="search-container">
@@ -55,4 +57,23 @@ class Navbar extends React.Component {
   }
 }
 
-export default Navbar;
+// class NavbarWrapper extends React.Component{
+//   render(){
+//     return(
+//       <StoreContext.Consumer>
+//       {(store)=>{
+//         <Navbar dispatch={store.dispatch} search={this.props.search}/>
+//       }}
+//       </StoreContext.Consumer>
+//     )
+//   }
+// }
+
+function mapStateToProps({search}) {
+  return {
+    search
+  };
+}
+export default connect(mapStateToProps)(Navbar);
+
+

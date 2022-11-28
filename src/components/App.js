@@ -3,19 +3,17 @@ import Navbar from "./Navbar";
 import MovieCard from "./Moviecard";
 import React from "react";
 import { addMovies, setShowFavourites } from "../actions";
+// import {connect} from '../index';
+import {connect} from 'react-redux'
 
 class App extends React.Component {
-  componentDidMount() {
-    const { store } = this.props;
-    store.subscribe(() => {
-      this.forceUpdate();
-    });
 
-    store.dispatch(addMovies(data));
+  componentDidMount() {
+    this.props.dispatch(addMovies(data));
   }
 
   isMovieFavourite = (movie) => {
-    const { favourites } = this.props.store.getState().movies;
+    const { favourites } = this.props.movies;
     const index = favourites.indexOf(movie);
     if (index !== -1) {
       //found the movie
@@ -25,17 +23,16 @@ class App extends React.Component {
   };
 
   setShowFavourite = (val) => {
-    this.props.store.dispatch(setShowFavourites(val));
+    this.props.dispatch(setShowFavourites(val));
   };
   render() {
-    const { movies,search } = this.props.store.getState(); //{movies:{},search:{}}
-    const { list, favourites, showFavourites } = movies
-
+    const { movies,search } = this.props; //{movies:{},search:{}}
+    const { list, favourites, showFavourites } = movies;
     const display = showFavourites ? favourites : list;
 
     return (
       <div className="App">
-        <Navbar store={this.props.store} search={search}/>
+        <Navbar />
         <div className="main">
           <div className="tabs">
             <div
@@ -61,10 +58,12 @@ class App extends React.Component {
               <MovieCard
                 movie={movie}
                 key={`movie-${index}`}
-                dispatch={this.props.store.dispatch}
                 isFavourite={this.isMovieFavourite(movie)}
               />
             ))}
+             {display.length === 0 ? (
+              <div className="no-movies">No movies to display! </div>
+            ) : null}
           </div>
         </div>
       </div>
@@ -72,4 +71,13 @@ class App extends React.Component {
   }
 }
 
-export default App;
+
+function mapStateToProps(state) {
+  return {
+    movies: state.movies,
+    search: state.movies,
+  };
+}
+const connectedComponent = connect(mapStateToProps)(App);
+export default connectedComponent;
+
